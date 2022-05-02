@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Crud.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ChatService</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Crud.kt</span></div><h1>Crud.kt</h1><pre class="source lang-java linenums">
+
+<span class="nc" id="L3">open class Crud&lt;T : ElementId&gt; {</span>
+<span class="nc" id="L4">    private val messages = mutableListOf&lt;Message&gt;()</span>
+<span class="nc" id="L5">    private val chats = mutableListOf&lt;Chat&gt;()</span>
+    private var countMessage = 0
+
+//    fun incomingMessage(id: Int): Boolean {
+//        if (messages.userIdIn == id) {
+//            return false
+//        }
+//        return true
+//    }
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РєРѕР»Р»РµРєС†РёРё.
+     */
+//    internal fun addNewMessage(userIdIn: Int, userIdOut: Int, text: String): List&lt;Chat&gt; {
+//        val message = Message(userId = userIdIn, messageId = uniqueId(), text, incoming = false, read = true)
+//        val chat = Chat(userIdIn, userIdOut, id = uniqueId(), mutableListOf(message))
+//        chats.add(chat)
+//        countMessage++
+//        return chats
+//    }
+
+    internal fun addNewChat(userIdIn: Int, userIdOut: Int, text: String): List&lt;Chat&gt; {
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (countMessage == 0) {</span>
+<span class="nc" id="L28">            val message = Message(userId = userIdIn, messageId = uniqueId(), text, incoming = false, read = true)</span>
+<span class="nc" id="L29">            val chat = Chat(userIdIn, userIdOut, id = uniqueId(), mutableListOf(message))</span>
+<span class="nc" id="L30">            chats.add(chat)</span>
+<span class="nc" id="L31">            countMessage = 1</span>
+        }
+<span class="nc" id="L33">        return chats</span>
+    }
+
+    /**
+     * РЈРґР°Р»РµРЅРёРµ С‡Р°С‚Р°.
+     */
+    internal fun deleteChat(id: Int): Boolean {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (value in chats) {</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (value.id == id) {</span>
+<span class="nc" id="L42">                chats.remove(value)</span>
+<span class="nc" id="L43">                return true</span>
+            }
+<span class="nc" id="L45">            println(&quot;Р’С‹ РїС‹С‚Р°РµС‚РµСЃСЊ СѓРґР°Р»РёС‚СЊ РЅРµ С‚РѕС‚ С‡Р°С‚, РїСЂРѕРІРµСЂС‚Рµ РµС‰Рµ СЂР°Р·!&quot;)</span>
+        }
+<span class="nc" id="L47">        return false</span>
+    }
+//private fun findChat (id: Int): Chat{
+//   return chats.find { it.id == id }
+//}
+    /**
+     * РЈРґР°Р»РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ.
+     */
+//    internal fun deleteMessage(userId: Int, id: Int): Boolean {
+//        for (value in chats) {
+//            for (message in messages) {
+//                if (message.messageId == id) {
+//                    if (countMessage &gt; 1) {
+//                        messages.remove(message)
+//                    } else chats.remove(value)
+//                }
+//                println(&quot;Р’С‹ РїС‹С‚Р°РµС‚РµСЃСЊ СѓРґР°Р»РёС‚СЊ РЅРµ С‚Рѕ СЃРѕРѕР±С‰РµРЅРёРµ, РїСЂРѕРІРµСЂС‚Рµ РµС‰Рµ СЂР°Р·!&quot;)
+//            }
+//            return true
+//        }
+//        return false
+//    }
+
+    /**
+     * РћР±РЅРѕРІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РєРѕР»Р»РµРєС†РёРё.
+     */
+    internal fun update(id: Int): Boolean {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for ((index, elements) in messages.withIndex()) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (elements.messageId == id) {</span>
+<span class="nc" id="L76">                messages[index] = elements</span>
+<span class="nc" id="L77">                return true</span>
+            }
+<span class="nc" id="L79">            println(&quot;РћР±РЅРѕРІР»РµРЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ!&quot;)</span>
+        }
+<span class="nc" id="L81">        return false</span>
+    }
+
+    /**
+     * РџРѕР»СѓС‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РєРѕР»Р»РµРєС†РёРё.
+     */
+//    internal fun getCountUnreadMessage(userIdIn: Int) : Int{
+//        var count =0
+//                if (messages.userIdIn == userIdIn){
+//                     count ++
+//                }
+//
+//
+//        return count
+//    }
+
+
+    /**
+     * Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ СѓРґР°Р»РµРЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РєРѕР»Р»РµРєС†РёРё.
+     */
+//    internal fun printMessage() {
+//        chats.forEach { _ -&gt; print(messages.forEach { _ -&gt;  }) }
+//    }
+
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ Id
+     */
+     fun uniqueId(): Int {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (chats.isEmpty()) {</span>
+<span class="nc" id="L111">            return 1</span>
+        }
+<span class="nc" id="L113">        return chats.size + 1</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChatService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ChatService</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">ChatService.kt</span></div><h1>ChatService.kt</h1><pre class="source lang-java linenums"><span class="nc" id="L1">class ChatService {</span>
+<span class="nc" id="L2">    private val chats = mutableListOf&lt;Chat&gt;()</span>
+<span class="nc" id="L3">    val users = mutableListOf&lt;User&gt;()</span>
+
+    /**
+     * РџРѕРёСЃРє С‡Р°С‚Р° РїРѕ РґРІСѓРј СЃРѕР±РµСЃРµРґРЅРёРєР°Рј.
+     */
+    private fun findChat(to: Int, from: Int) =
+<span class="nc bnc" id="L9" title="All 10 branches missed.">        chats.indexOfFirst { (it.to == to &amp;&amp; it.from == from) || (it.to == from &amp;&amp; it.from == to) }</span>
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ СЃРѕР±РµСЃРµРґРЅРёРєРѕРІ.
+     */
+<span class="nc" id="L14">    internal fun createUser(name: String) = users.add(User(userId = users.size +1, name))</span>
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ.
+     */
+    internal fun addNewMessage(to: Int, from: Int, text: String): Boolean {
+<span class="nc bnc" id="L20" title="All 2 branches missed.">        if (findChat(to = to, from = from) == -1) {</span>
+<span class="nc" id="L21">            chats.add(Chat(</span>
+<span class="nc" id="L22">                to = to,</span>
+<span class="nc" id="L23">                from = from,</span>
+<span class="nc" id="L24">                id = uniqueId(),</span>
+<span class="nc" id="L25">                mutableListOf(Message(userId = to,</span>
+<span class="nc" id="L26">                    messageId = uniqueIdMessage(userIdIn = to, userIdOut = from),</span>
+<span class="nc" id="L27">                    text = text,</span>
+<span class="nc" id="L28">                    incoming = false,</span>
+<span class="nc" id="L29">                    read = true))))</span>
+<span class="nc" id="L30">            return true</span>
+        } else
+<span class="nc" id="L32">            chats[findChat(to = to, from = from)].message.add(Message(userId = to,</span>
+<span class="nc" id="L33">                messageId = uniqueIdMessage(userIdIn = to, userIdOut = from),</span>
+<span class="nc" id="L34">                text = text,</span>
+<span class="nc" id="L35">                incoming = false,</span>
+<span class="nc" id="L36">                read = true))</span>
+<span class="nc" id="L37">        return false</span>
+    }
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ С‡Р°С‚Р°
+     */
+    internal fun addNewChat(to: Int, from: Int, text: String): Boolean {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (findChat(to = to, from = from) == -1) {</span>
+<span class="nc" id="L45">            chats.add(Chat(</span>
+<span class="nc" id="L46">                to, from, id = uniqueId(),</span>
+<span class="nc" id="L47">                message = mutableListOf(Message(userId = to,</span>
+<span class="nc" id="L48">                    messageId = uniqueIdMessage(to, from),</span>
+<span class="nc" id="L49">                    text,</span>
+<span class="nc" id="L50">                    incoming = false,</span>
+<span class="nc" id="L51">                    read = true))</span>
+            ))
+<span class="nc" id="L53">            return true</span>
+        }
+<span class="nc" id="L55">        println(&quot;РўР°РєРѕР№ С‡Р°С‚ СѓР¶Рµ РµСЃС‚СЊ!&quot;)</span>
+<span class="nc" id="L56">        return false</span>
+    }
+
+    /**
+     * РЈРґР°Р»РµРЅРёРµ С‡Р°С‚Р° РїРѕ ID С‡Р°С‚Р°.
+     */
+    internal fun deleteChat(id: Int): Boolean {
+<span class="nc bnc" id="L63" title="All 6 branches missed.">        if (chats.indexOfFirst { it.id == id } != -1) {</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            chats.removeIf { it.id == id }</span>
+<span class="nc" id="L65">            return true</span>
+        }
+<span class="nc" id="L67">        println(&quot;Р’С‹ РїС‹С‚Р°РµС‚РµСЃСЊ СѓРґР°Р»РёС‚СЊ РЅРµ С‚РѕС‚ С‡Р°С‚, РїСЂРѕРІРµСЂС‚Рµ РµС‰Рµ СЂР°Р·!&quot;)</span>
+<span class="nc" id="L68">        return false</span>
+    }
+
+    /**
+     * РЈРґР°Р»РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РїРѕ ID СЃРѕР±РµСЃРµРґРЅРёРєР° Рё ID СЃРѕРѕР±С‰РµРЅРёСЏ.
+     */
+    internal fun deleteMessage(userId: Int, messageId: Int): Boolean {
+<span class="nc bnc" id="L75" title="All 8 branches missed.">        if (chats.any { it.from == userId || it.from == userId }) {</span>
+<span class="nc bnc" id="L76" title="All 12 branches missed.">            if (chats[chats.indexOfFirst { it.from == userId || it.to == userId }].message.any { it.messageId == messageId }) {</span>
+<span class="nc bnc" id="L77" title="All 8 branches missed.">                chats[chats.indexOfFirst { it.from == userId || it.to == userId }].message.removeIf { it.messageId == messageId }</span>
+<span class="nc" id="L78">                return true</span>
+            }
+        }
+<span class="nc" id="L81">        println(&quot;Р’С‹ РїС‹С‚Р°РµС‚РµСЃСЊ СѓРґР°Р»РёС‚СЊ РЅРµ С‚Рѕ СЃРѕРѕР±С‰РµРЅРёРµ, РїСЂРѕРІРµСЂС‚Рµ РµС‰Рµ СЂР°Р·!&quot;)</span>
+<span class="nc" id="L82">        return false</span>
+    }
+
+    /**
+     * Р’С‹РІРѕРґ СЃРїРёСЃРєР° С‡Р°С‚РѕРІ РЅР° СЌРєСЂР°РЅ.
+     */
+    fun getChats() =
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        println(chats.ifEmpty { &quot;Р§Р°С‚ РЅРµ РЅР°Р№РґРµРЅ!&quot; })</span>
+
+    /**
+     *РћР±РЅРѕРІР»РµРЅРёРµ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ.
+     */
+    internal fun updateMessage(userId: Int, messageId: Int, text: String): Boolean {
+<span class="nc bnc" id="L95" title="All 8 branches missed.">        if (chats.any { it.from == userId || it.from == userId }) {</span>
+<span class="nc bnc" id="L96" title="All 12 branches missed.">            if (chats[chats.indexOfFirst { it.from == userId || it.to == userId }].message.any { it.messageId == messageId }) {</span>
+<span class="nc bnc" id="L97" title="All 12 branches missed.">                chats[chats.indexOfFirst { it.from == userId || it.to == userId }].message.find { it.messageId == messageId }!!.text =</span>
+<span class="nc" id="L98">                    text</span>
+
+<span class="nc" id="L100">                return true</span>
+            }
+<span class="nc" id="L102">            println(&quot;РЎРѕРѕР±С‰РµРЅРёСЏ РЅРµ РЅР°Р№РґРµРЅС‹!&quot;)</span>
+        }
+<span class="nc" id="L104">        println(&quot;РћР±РЅРѕРІР»РµРЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ!&quot;)</span>
+<span class="nc" id="L105">        return false</span>
+    }
+
+    /**
+     * РџРѕР»СѓС‡РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РїРѕ РёС… ID.
+     */
+    internal fun getMessagesByMessageId(chatId: Int, messageId: Int): Boolean {
+<span class="nc bnc" id="L112" title="All 6 branches missed.">        if (chats.indexOfFirst { it.id == chatId } != -1) {</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">            if (chats[chats.indexOfFirst { it.id == chatId }]</span>
+<span class="nc bnc" id="L114" title="All 6 branches missed.">                    .message.any { it.messageId &gt;= messageId }</span>
+            ) {
+<span class="nc bnc" id="L116" title="All 4 branches missed.">                val chat = chats[chats.indexOfFirst { it.id == chatId }]</span>
+<span class="nc" id="L117">                    .message</span>
+<span class="nc bnc" id="L118" title="All 4 branches missed.">                    .filter { it.messageId &gt;= messageId }</span>
+<span class="nc" id="L119">                    .joinToString(prefix = &quot;\n&quot;, separator = &quot;||\n&quot;) { it.text }</span>
+<span class="nc" id="L120">                println(&quot;___________________________________________________&quot;)</span>
+<span class="nc" id="L121">                println(&quot;Chat$chatId Messages starting at($messageId): $chat&quot;)</span>
+
+<span class="nc" id="L123">                return true</span>
+            }
+<span class="nc" id="L125">            println(&quot;РЎРѕРѕР±С‰РµРЅРёР№ РЅРµС‚!&quot;)</span>
+        }
+<span class="nc" id="L127">        println(&quot;Р§Р°С‚ РЅРµ РЅР°Р№РґРµРЅ!&quot;)</span>
+<span class="nc" id="L128">        return false</span>
+    }
+
+    /**
+     * РџРѕР»СѓС‡РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёР№ РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ.
+     */
+    internal fun getMessagesByCount(chatId: Int, count: Int): Boolean {
+<span class="nc bnc" id="L135" title="All 6 branches missed.">        if (chats.indexOfFirst { it.id == chatId } != -1) {</span>
+<span class="nc bnc" id="L136" title="All 4 branches missed.">            val chat = chats[chats.indexOfFirst { it.id == chatId }]</span>
+<span class="nc" id="L137">                .message</span>
+<span class="nc" id="L138">                .takeLast(count)</span>
+<span class="nc" id="L139">                .joinToString(prefix = &quot;\n&quot;, separator = &quot;||\n&quot;) { it.text }</span>
+<span class="nc" id="L140">            println(&quot;___________________________________________________&quot;)</span>
+<span class="nc" id="L141">            println(&quot;Chat $chatId Messages in the amount($count): $chat&quot;)</span>
+<span class="nc" id="L142">            return true</span>
+        }
+<span class="nc" id="L144">        println(&quot;Р§Р°С‚ РЅРµ РЅР°Р№РґРµРЅ!&quot;)</span>
+<span class="nc" id="L145">        return false</span>
+    }
+
+    /**
+     * РџРѕР»СѓС‡РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёР№ РїРѕ ID С‡Р°С‚Р°.
+     */
+    internal fun getMessagesByChatId(chatId: Int): Boolean {
+<span class="nc bnc" id="L152" title="All 6 branches missed.">        if (chats.indexOfFirst { it.id == chatId } != -1) {</span>
+<span class="nc bnc" id="L153" title="All 4 branches missed.">            val chat = chats[chats.indexOfFirst { it.id == chatId }].message</span>
+<span class="nc" id="L154">                .joinToString(prefix = &quot;\n&quot;, separator = &quot;||\n&quot;) { it.text }</span>
+<span class="nc" id="L155">            println(&quot;________________________________&quot;)</span>
+<span class="nc" id="L156">            println(&quot;Chat$chatId Messages: $chat&quot;)</span>
+<span class="nc" id="L157">            return true</span>
+        }
+<span class="nc" id="L159">        println(&quot;РЎРѕРѕР±С‰РµРЅРёР№ РЅРµС‚!&quot;)</span>
+<span class="nc" id="L160">        return false</span>
+    }
+
+    /**
+     * РџРѕР»СѓС‡РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° С‡Р°С‚РѕРІ, РіРґРµ РµСЃС‚СЊ С…РѕС‚СЏ Р±С‹ РѕРґРЅРѕ РЅРµ РїСЂРѕС‡РёС‚Р°РЅРЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ.
+     */
+    internal fun getCountUnreadMessage(userId: Int): Int {
+<span class="nc bnc" id="L167" title="All 6 branches missed.">        if (chats.indexOfFirst { it.to == userId } != -1) {</span>
+<span class="nc bnc" id="L168" title="All 4 branches missed.">            return chats.filter { it.to == userId }.map { it.message }.size</span>
+        }
+<span class="nc" id="L170">        println(&quot;РќРµРїСЂРѕС‡РёС‚Р°РЅРЅС‹С… СЃРѕРѕР±С‰РµРЅРёР№ РЅРµС‚!&quot;); return 0</span>
+    }
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ ID РґР»СЏ С‡Р°С‚Р°.
+     */
+    private fun uniqueId(): Int {
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        if (chats.isEmpty()) {</span>
+<span class="nc" id="L178">            return 1</span>
+        }
+<span class="nc" id="L180">        return chats.last().id + 1</span>
+    }
+
+    /**
+     * РЎРѕР·РґР°РЅРёРµ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ ID РґР»СЏ СЃРѕРѕР±С‰РµРЅРёСЏ.
+     */
+    private fun uniqueIdMessage(userIdIn: Int, userIdOut: Int): Int {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if (findChat(to = userIdIn, from = userIdOut) == -1)</span>
+<span class="nc" id="L188">            return 1</span>
+
+<span class="nc bnc" id="L190" title="All 6 branches missed.">        return chats.maxOf { it.message.last().messageId } + 1</span>
+    }
+}
+
+
+fun main() {
+<span class="nc" id="L196">    val chatService = ChatService()</span>
+<span class="nc" id="L197">    chatService.createUser(&quot;Petya&quot;)</span>
+<span class="nc" id="L198">    chatService.createUser(&quot;Anya&quot;)</span>
+<span class="nc" id="L199">    println(chatService.users)</span>
+
+<span class="nc" id="L201">    chatService.addNewChat(1, 2, &quot;hello world&quot;)</span>
+
+<span class="nc" id="L203">    chatService.addNewMessage(2, 1, &quot;111111111111111&quot;)</span>
+<span class="nc" id="L204">    chatService.addNewMessage(2, 1, &quot;2222222222222222&quot;)</span>
+<span class="nc" id="L205">    chatService.addNewMessage(1, 2, &quot;333333333333333333&quot;)</span>
+<span class="nc" id="L206">    chatService.addNewMessage(2, 1, &quot;4444444444444444&quot;)</span>
+<span class="nc" id="L207">    chatService.addNewMessage(2, 6, &quot;555555555555555555&quot;)</span>
+<span class="nc" id="L208">    chatService.addNewMessage(1, 1, &quot;666666666666666666&quot;)</span>
+
+<span class="nc" id="L210">    chatService.addNewMessage(1, 2, &quot;Go koding&quot;)</span>
+
+<span class="nc" id="L212">    chatService.addNewMessage(6, 2, &quot;?????????&quot;)</span>
+<span class="nc" id="L213">    chatService.updateMessage(1,1,&quot;1234567890&quot;)</span>
+<span class="nc" id="L214">    chatService.getChats()</span>
+
+
+
+<span class="nc" id="L218">}</span>
+
+
+
+
+
+
+
+
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
